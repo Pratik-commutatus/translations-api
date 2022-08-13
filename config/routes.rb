@@ -1,7 +1,6 @@
-Rails.application.routes.draw do
-  get 'health/index'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+Rails.application.routes.draw do 
+  mount TranslationsAPI::API  => '/'
+  mount GrapeSwaggerRails::Engine => '/swagger'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get 'health/index'
 end
