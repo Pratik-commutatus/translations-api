@@ -16,10 +16,13 @@
 #
 default: &default
   adapter: postgresql
+  host: db
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: password1234
 
 development:
   <<: *default
@@ -79,8 +82,8 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  <<: *default
-  database: translations_api_production
-  username: translations_api
-  password: <%= ENV["TRANSLATIONS_API_DATABASE_PASSWORD"] %>
+# production:
+#   <<: *default
+#   database: translations_api_production
+#   username: translations_api
+#   password: <%= ENV["TRANSLATIONS_API_DATABASE_PASSWORD"] %>

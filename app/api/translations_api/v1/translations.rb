@@ -5,7 +5,7 @@ module TranslationsAPI::V1
     version 'v1', using: :path
 
     resource :translations do
-      desc 'Creates a translation(Note: the translation process will not take place within this application).'
+      desc 'Creates a translation(note: the translation process will not take place within this application).'
       params do
         requires :source_language_code, type: String,  desc: 'an ISO 639-1 source language code', values: Glossary.available_language_codes
         requires :target_language_code, type: String,  desc: 'an ISO 639-1 target language code', values: Glossary.available_language_codes
