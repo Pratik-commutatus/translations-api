@@ -3,7 +3,7 @@
 ## Overview
 This is a Dockerized, API-only Ruby on Rails application with several endpoints to manage glossaries and translations.
 
-Features:
+Features:\
 - REST API using Grape.
 - Tests using RSpec.
 - PostgreSQL database.
