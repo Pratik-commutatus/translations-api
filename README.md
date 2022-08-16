@@ -19,6 +19,7 @@ docker-compose build
 # One time
 docker-compose run web bash
 rails db:create db:migrate
+exit
 
 # And then, to start the server each time
 docker-compose up web
@@ -36,5 +37,6 @@ http://localhost:3000/swagger
 All endpoints in this API have been tested using RSpec. To run all tests:
 
 ```
+docker-compose run web bash
 bundle exec rspec
 ```
