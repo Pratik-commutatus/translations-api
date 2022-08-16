@@ -1,21 +1,19 @@
 class Glossary < ApplicationRecord
-  include GlossaryConcerns
+  require 'csv'
 
   has_many :terms
   has_many :translations
+  
+  file_data = CSV.open('imports/language-codes.csv', headers: :first_row).map(&:to_h)
+  AVAILABLE_LANGUAGE_CODES = file_data.map {|h| h['code']}
 
-  validates :source_language_code, :target_language_code, presence: true, inclusion: { in: Glossary.available_language_codes }
+  validates :source_language_code, :target_language_code, presence: true, inclusion: { in: AVAILABLE_LANGUAGE_CODES }
   validate :glossary_uniqueness
 
   def glossary_uniqueness
-    identical_records = Glossary.records_with_codes(source_language_code, target_language_code)
-    errors.add(:base, :invalid, message: 'A glossary with the entered combination of language codes already exists.') if identical_records.present?
+    duplicate_records = Glossary.where(source_language_code: source_language_code, target_language_code: target_language_code)
+    errors.add(:base, :invalid, message: 'A glossary with the entered combination of language codes already exists.') if duplicate_records.present?
   end
 
-  scope :records_with_codes, lambda { |source_language_code, target_language_code|
-    return nil if (source_language_code.blank? && target_language_code.blank?)
-    where(source_language_code: source_language_code, target_language_code: target_language_code)
-  }
-
-  scope :that_have_terms, -> { joins(:terms).distinct }
+  scope :that_have_terms, -> { joins(:terms).distinct } 
 end

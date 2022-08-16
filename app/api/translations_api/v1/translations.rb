@@ -1,15 +1,15 @@
 module TranslationsAPI::V1
   class Translations < Grape::API
+    version 'v1', using: :path
     format :json
     prefix :api
-    version 'v1', using: :path
 
     resource :translations do
       desc 'Creates a translation(note: the translation process will not take place within this application).'
       params do
-        requires :source_language_code, type: String,  desc: 'an ISO 639-1 source language code', values: Glossary.available_language_codes
-        requires :target_language_code, type: String,  desc: 'an ISO 639-1 target language code', values: Glossary.available_language_codes
-        requires :source_text,          type: String,  desc: 'a source text to be translated'
+        requires :source_language_code, type: String,  desc: 'an ISO 639-1 source language code', values: Glossary::AVAILABLE_LANGUAGE_CODES
+        requires :target_language_code, type: String,  desc: 'an ISO 639-1 target language code', values: Glossary::AVAILABLE_LANGUAGE_CODES
+        requires :source_text,          type: String,  desc: "a source text to be translated (character limit: #{Translation.source_text_char_limit})"
         optional :glossary_id,          type: Integer, desc: 'glossary ID'
       end
       post do
@@ -41,8 +41,7 @@ module TranslationsAPI::V1
         if matching_terms.present?
           highlighted_text = translation.highlight_source_text(matching_terms)
           present :highlighted_text, highlighted_text
-        end
-        
+        end        
       end
     end
   end

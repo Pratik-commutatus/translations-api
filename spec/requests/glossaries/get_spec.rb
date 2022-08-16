@@ -1,14 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Gloassaries', type: :request do
-  source_language_code = Glossary.available_language_codes.sample
-  target_language_code = Glossary.available_language_codes.sample
+  source_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
+  target_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
 
-  describe '.find' do
-  
+  describe '.find' do  
     let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
 
-    context 'With valid parameters' do
+    context 'With a valid ID' do
       before { get "/api/v1/glossaries/#{principal_glossary.id}" }
 
       it "returns a 'success' status" do
@@ -28,7 +27,7 @@ RSpec.describe 'Gloassaries', type: :request do
       end
     end
 
-    context 'When trying to fetch with an ID that does not exist' do
+    context 'With a non-existing ID' do
       before { get "/api/v1/glossaries/#{principal_glossary.id+1}" }
 
       it "returns a 'not_found' error status" do
@@ -46,9 +45,9 @@ RSpec.describe 'Gloassaries', type: :request do
   end
 
   describe '.that_have_terms' do
-    context 'When glossaries are present' do
+    let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
 
-      let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
+    context 'When glossaries with terms are present' do
       let!(:principal_glossary_term) {principal_glossary.terms.create(source_term: 'hello', target_term: 'hola')}
 
       before { get '/api/v1/glossaries' }
@@ -66,19 +65,15 @@ RSpec.describe 'Gloassaries', type: :request do
       end
     end
 
-    context 'When glossaries are not present' do
+    context 'When glossaries with terms are not present' do
       before { get '/api/v1/glossaries' }
       
       it "returns a 'success' status" do
         expect(response).to have_http_status(:success)
       end
 
-      it 'returns a glossaries array' do
-        expect(json['glossaries']).to be_an(Array) 
-      end
-
-      it 'returns an empty array' do
-        expect(json['glossaries'].size).to be == 0
+      it 'returns an empty glossaries array' do
+        expect(json['glossaries']).to match_array([]) 
       end
     end
   end

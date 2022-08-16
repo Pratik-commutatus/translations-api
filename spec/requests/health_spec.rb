@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe "Healths", type: :request do
-  describe "GET /index" do
-    it "returns http success" do
-      # this will perform a GET request to the /health/index route
-      get "/health/index"
-      
-      # 'response' is a special object which contains HTTP response received after a request is sent
+  context "tests the status of the API" do
+    before { get "/health/index" }
+
+    it "returns an 'online' status" do
       expect(response.body).to eq('{"status":"online"}')
+    end
       
-      # we can also check the http status of the response
+    it "returns http success" do
       expect(response.status).to eq(200)
     end
   end

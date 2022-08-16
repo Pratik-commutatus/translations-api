@@ -2,15 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'Glossaries', type: :request do
   describe '.create' do
-    source_language_code = Glossary.available_language_codes.sample
-    target_language_code = Glossary.available_language_codes.sample
+    source_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
+    target_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
 
     let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
 
     context 'With valid parameters' do
-
-      unused_source_language_code = (Glossary.available_language_codes - ([]<<source_language_code)).sample
-      unused_target_language_code = (Glossary.available_language_codes - ([]<<target_language_code)).sample
+      unused_source_language_code = (Glossary::AVAILABLE_LANGUAGE_CODES - ([]<<source_language_code)).sample
+      unused_target_language_code = (Glossary::AVAILABLE_LANGUAGE_CODES - ([]<<target_language_code)).sample
 
       before do
         post '/api/v1/glossaries', params: {
@@ -27,7 +26,7 @@ RSpec.describe 'Glossaries', type: :request do
         expect(json['glossary']['target_language_code']).to eq(unused_target_language_code)
       end
 
-      it 'returns a created status' do
+      it "returns a 'created' status" do
         expect(response).to have_http_status(:created)
       end
     end

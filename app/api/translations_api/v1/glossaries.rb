@@ -1,14 +1,14 @@
 module TranslationsAPI::V1
   class Glossaries < Grape::API
+    version 'v1', using: :path
     format :json
     prefix :api
-    version 'v1', using: :path
 
     resource :glossaries do
       desc 'Creates a glossary.'
       params do
-        requires :source_language_code, type: String, desc: 'an ISO 639-1 source language code', values: Glossary.available_language_codes
-        requires :target_language_code, type: String, desc: 'an ISO 639-1 target language code', values: Glossary.available_language_codes
+        requires :source_language_code, type: String, desc: 'an ISO 639-1 source language code', values: Glossary::AVAILABLE_LANGUAGE_CODES
+        requires :target_language_code, type: String, desc: 'an ISO 639-1 target language code', values: Glossary::AVAILABLE_LANGUAGE_CODES
       end
       post do
         glossary = Glossary.create!(params)

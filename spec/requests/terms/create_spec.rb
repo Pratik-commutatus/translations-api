@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Terms', type: :request do
   describe '.create' do
-    source_language_code = Glossary.available_language_codes.sample
-    target_language_code = Glossary.available_language_codes.sample
+    source_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
+    target_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
     source_term = 'term-first'
     target_term = 'term-last'
 
@@ -17,7 +17,7 @@ RSpec.describe 'Terms', type: :request do
         }
       end
 
-      it 'returns a created status' do
+      it "returns a 'created' status" do
         expect(response).to have_http_status(:created)
       end
 
@@ -38,12 +38,20 @@ RSpec.describe 'Terms', type: :request do
       before do
         post "/api/v1/glossaries/#{principal_glossary.id}/terms", params: {
           source_term: '',
-          target_term: target_term,
+          target_term: '',
         }
       end
 
       it "returns an 'unprocessable entity' status" do
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns an en error for source_term" do
+        expect(json['error']).to include("Source term can't be blank")
+      end
+
+      it "returns an en error for target_term" do
+        expect(json['error']).to include("Target term can't be blank")
       end
     end
 

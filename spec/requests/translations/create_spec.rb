@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Translations', type: :request do
   describe '.create' do
-    source_language_code = Glossary.available_language_codes.sample
-    target_language_code = Glossary.available_language_codes.sample
+    source_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
+    target_language_code = Glossary::AVAILABLE_LANGUAGE_CODES.sample
     source_text = 'Please translate this text.'
 
     let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
@@ -64,12 +64,16 @@ RSpec.describe 'Translations', type: :request do
 
       it "returns an 'unprocessable entity' status" do
         expect(response).to have_http_status(:unprocessable_entity)
-      end      
+      end     
+      
+      it "returns a max-length error for source_text" do
+        expect(json['error']).to include('Source text is too long.')
+      end
     end
 
     context 'With non-matching glossary ID and language codes' do
-      unused_source_language_code = (Glossary.available_language_codes - ([]<<source_language_code)).sample
-      unused_target_language_code = (Glossary.available_language_codes - ([]<<target_language_code)).sample
+      unused_source_language_code = (Glossary::AVAILABLE_LANGUAGE_CODES - ([]<<source_language_code)).sample
+      unused_target_language_code = (Glossary::AVAILABLE_LANGUAGE_CODES - ([]<<target_language_code)).sample
 
       before do
         post '/api/v1/translations', params: {
