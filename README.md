@@ -4,11 +4,11 @@
 This is a Dockerized, API-only Ruby on Rails application with several endpoints to manage glossaries and translations.
 
 Features:
-    - REST API using Grape.
-    - Tests using RSpec.
-    - PostgreSQL database.
-    - Swagger UI for API documentation and interaction.
-    - Dockerfile that helps to run the API.
+  - REST API using Grape.
+  - Tests using RSpec.
+  - PostgreSQL database.
+  - Swagger UI for API documentation and interaction.
+  - Dockerfile that helps to run the API.
 
 ## Installation
 You can use Docker to install and run this application:
