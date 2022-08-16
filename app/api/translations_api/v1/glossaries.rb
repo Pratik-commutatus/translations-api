@@ -26,7 +26,7 @@ module TranslationsAPI::V1
 
       desc 'Returns all glossaries with terms.'
       get do
-        glossaries = Glossary.joins(:terms).distinct
+        glossaries = Glossary.that_have_terms
         present :glossaries, glossaries, with: Entities::Glossaries
       end
 

@@ -1,13 +1,13 @@
 class Translation < ApplicationRecord
   belongs_to :glossary
-
+  
   validates :source_text, presence: true
-  validates :source_text, length: {maximum: 5000, too_long: "is too long. Accepted character length is %{count}."}
+  validates :source_text, length: {maximum: @source_text_char_limit = 5000, too_long: "is too long. Accepted character length is %{count}."}
 
   def get_matching_source_terms
     glossary_source_terms = self.glossary.terms.pluck(:source_term)
     source_text_terms = self.source_text.split
-    matching_terms = source_text_terms.select{|t| glossary_source_terms.include?(t)}
+    matching_terms = source_text_terms.map{|t| t.gsub(/[^0-9A-Za-z]/, '') if glossary_source_terms.include?(t.gsub(/[^0-9A-Za-z]/, ''))}.compact
     matching_terms.present? ? matching_terms : nil
   end
 
@@ -21,4 +21,9 @@ class Translation < ApplicationRecord
 
     highlighted_text = highlighted_text_terms.join(' ')
   end
+
+  class << self
+    attr_reader :source_text_char_limit
+  end
+  
 end

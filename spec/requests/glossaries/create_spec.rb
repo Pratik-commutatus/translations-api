@@ -7,16 +7,16 @@ RSpec.describe 'Glossaries', type: :request do
 
     let!(:principal_glossary) { Glossary.create(source_language_code: source_language_code, target_language_code: target_language_code) }
 
-    context 'with valid parameters' do
+    context 'With valid parameters' do
 
       unused_source_language_code = (Glossary.available_language_codes - ([]<<source_language_code)).sample
       unused_target_language_code = (Glossary.available_language_codes - ([]<<target_language_code)).sample
 
       before do
-        post '/api/v1/glossaries', params:{
-                                            source_language_code: unused_source_language_code,
-                                            target_language_code: unused_target_language_code
-                                          }
+        post '/api/v1/glossaries', params: {
+          source_language_code: unused_source_language_code,
+          target_language_code: unused_target_language_code
+        }
       end
 
       it 'returns the source_language_code' do
@@ -32,12 +32,12 @@ RSpec.describe 'Glossaries', type: :request do
       end
     end
 
-    context 'with an existing language codes combination' do
+    context 'With an existing language codes combination' do
       before do
-        post '/api/v1/glossaries', params:{
-                                            source_language_code: source_language_code,
-                                            target_language_code: target_language_code
-                                          }
+        post '/api/v1/glossaries', params: {
+          source_language_code: source_language_code,
+          target_language_code: target_language_code
+        }
       end
 
       it "returns an 'unprocessable entity' status" do
@@ -45,12 +45,12 @@ RSpec.describe 'Glossaries', type: :request do
       end
     end
 
-    context 'with invalid attributes' do
+    context 'With invalid parameters' do
       before do
-        post '/api/v1/glossaries', params:{
-                                            source_language_code: '',
-                                            target_language_code: 'xx'
-                                          }
+        post '/api/v1/glossaries', params: {
+          source_language_code: '',
+          target_language_code: 'xx'
+        }
       end
 
       it "returns a 'bad request' status" do
