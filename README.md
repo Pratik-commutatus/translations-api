@@ -40,3 +40,11 @@ All endpoints in this API have been tested using RSpec. To run all tests:
 docker-compose run web bash
 bundle exec rspec
 ```
+
+Available endpoints list for manual testing:
+- POST http://localhost:3000/api/v1/glossaries
+- GET  http://localhost:3000/api/v1/glossaries/<id>
+- GET  http://localhost:3000/api/v1/glossaries
+- POST http://localhost:3000/api/v1/glossaries/<id>/terms
+- POST http://localhost:3000/api/v1/translations
+- GET  http://localhost:3000/api/v1/translations/<id>
